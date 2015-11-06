@@ -13,7 +13,19 @@ readData <- function(filePath = "household_power_consumption.txt") {
     ) %>% tbl_df %>%
         mutate(time = dmy_hms(paste(Date, Time))) %>%
         select(-c(Date, Time)) %>%
-        filter(year(time) == 2007 & month(time) == 2)
+        filter(year(time) == 2007 & month(time) == 2) %>%
+        filter(day(time) %in% c(1, 2))
 }
 
+png("plot1.png", width = 480, height = 480)
 
+with(
+    readData(),
+    hist(
+        Global_active_power, 
+        main="Global active power",
+        xlab="Global Active Power (kilowatts)", 
+        col = "red")
+)
+
+dev.off()
